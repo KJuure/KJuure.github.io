@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kurt Armamento — Portfolio</title>
+  <meta name="description" content="Portfolio of a final‑year Computer Science student (Machine Learning @ UQ): projects in U‑Net segmentation, MDP/Search, and more." />
+  <meta property="og:title" content="Kurt Armamento — Portfolio" />
+  <meta property="og:description" content="ML @ UQ • U‑Net • MDP/Search • Python • PyTorch • FastAPI • SQL • Docker" />
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    /* ===== Base + Theme ===== */
+    :root{
+      --bg: #ffffff;
+      --text: #0f172a; /* slate-900 */
+      --muted: #475569; /* slate-600 */
+      --border: #e2e8f0; /* slate-200 */
+      --card: #f8fafc; /* slate-50 */
+      --accent: #2563eb; /* blue-600 */
+      --accent-contrast: #ffffff;
+      --shadow: 0 10px 20px rgba(2,6,23,.06), 0 2px 6px rgba(2,6,23,.04);
+      --radius: 1.25rem;
+      --maxw: 62rem; /* ~992px */
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg: #0b1020; /* deep navy */
+        --text: #e2e8f0; /* slate-200 */
+        --muted: #94a3b8; /* slate-400 */
+        --border: #1e293b; /* slate-800 */
+        --card: #0f172a; /* slate-900 */
+        --accent: #60a5fa; /* blue-300 */
+        --accent-contrast: #0b1020;
+        --shadow: 0 10px 20px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.25);
+      }
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, Noto Sans, "Apple Color Emoji","Segoe UI Emoji";
+      background:var(--bg); color:var(--text);
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    img{max-width:100%; height:auto; display:block}
+
+    /* ===== Layout ===== */
+    .container{max-width:var(--maxw); margin-inline:auto; padding: 2rem 1rem}
+    header{position:sticky; top:0; backdrop-filter:saturate(160%) blur(6px); background:color-mix(in oklab, var(--bg) 84%, transparent); border-bottom:1px solid var(--border); z-index:10}
+    .topbar{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding: .75rem 1rem; max-width:var(--maxw); margin:0 auto}
+    .brand{font-weight:700; letter-spacing:.2px}
+    nav ul{display:flex; list-style:none; gap:.75rem; padding:0; margin:0}
+    nav a{display:inline-block; padding:.5rem .75rem; border-radius:.6rem}
+    nav a:hover{background:var(--card); text-decoration:none}
+    .skip-link{position:absolute; left:-9999px}
+    .skip-link:focus{left:1rem; top:1rem; background:var(--accent); color:var(--accent-contrast); padding:.5rem .75rem; border-radius:.5rem}
+
+    /* ===== Hero ===== */
+    .hero{display:grid; gap:1.25rem; padding: 2.25rem 1rem 1rem}
+    .eyebrow{color:var(--muted); font-weight:600; letter-spacing:.12em; text-transform:uppercase; font-size:.75rem}
+    h1{font-size: clamp(1.8rem, 2.5vw + 1rem, 3rem); line-height:1.15; margin:.25rem 0}
+    .headline-accent{background: linear-gradient(90deg, var(--accent), color-mix(in oklab, var(--accent) 40%, hotpink));
+      -webkit-background-clip:text; background-clip:text; color:transparent}
+    .sub{color:var(--muted); max-width: 65ch}
+    .cta{display:flex; flex-wrap:wrap; gap:.75rem}
+    .btn{display:inline-flex; gap:.5rem; align-items:center; border:1px solid var(--border); background:var(--card); color:var(--text); padding:.6rem .9rem; border-radius:.75rem; box-shadow:var(--shadow)}
+    .btn.primary{background:var(--accent); color:var(--accent-contrast); border-color:transparent}
+    .btn:focus{outline:2px solid var(--accent); outline-offset:2px}
+
+    /* ===== Sections ===== */
+    section{padding: 2rem 1rem}
+    section h2{font-size: clamp(1.25rem, 1.2vw + 1rem, 1.75rem); margin:0 0 .75rem}
+    .muted{color:var(--muted)}
+    .cards{display:grid; gap:1rem}
+    @container cards (min-width: 36rem){ /* container query for nicer scaling if supported */
+      .cards{grid-template-columns: repeat(2, 1fr)}
+    }
+    @media (min-width: 900px){ .cards{grid-template-columns: repeat(3, 1fr)} }
+
+    .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column}
+    .card .thumb{aspect-ratio: 16/9; background:linear-gradient(135deg, color-mix(in oklab, var(--accent) 30%, transparent), transparent), repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0 10px, transparent 10px 20px)}
+    .card .body{padding:1rem}
+    .card h3{margin:.1rem 0 .25rem; font-size:1.05rem}
+    .tags{display:flex; flex-wrap:wrap; gap:.4rem; margin:.5rem 0 0; padding:0; list-style:none}
+    .tag{font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; border:1px dashed var(--border); border-radius:.5rem; padding:.15rem .45rem; color:var(--muted)}
+    .card .actions{display:flex; gap:.5rem; padding: 0 1rem 1rem}
+    .chip{display:inline-flex; align-items:center; gap:.35rem; padding:.45rem .6rem; border:1px solid var(--border); border-radius:.75rem; text-decoration:none}
+    .chip:hover{background:color-mix(in oklab, var(--card) 70%, var(--bg))}
+
+    /* Skills */
+    .grid{display:grid; gap:.75rem}
+    @media (min-width: 700px){ .grid{grid-template-columns: 1fr 1fr} }
+    .list{display:flex; flex-wrap:wrap; gap:.5rem}
+    .badge{padding:.35rem .55rem; border-radius:.5rem; border:1px solid var(--border); background:var(--card)}
+
+    /* Footer */
+    footer{border-top:1px solid var(--border); color:var(--muted); padding: 2rem 1rem; text-align:center}
+
+    /* Print: keep it clean */
+    @media print{
+      header, .actions, nav, .btn{display:none !important}
+      body{background:#fff;color:#000}
+      .card, section{break-inside:avoid}
+    }
+
+    /* Optional progressive enhancement */
+    @supports (container-type: inline-size){
+      .cards{container-type:inline-size}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header>
+    <div class="topbar">
+      <div class="brand">Kurt Armamento</div>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <section class="hero" aria-labelledby="intro">
+      <span class="eyebrow">Machine Learning @ UQ</span>
+      <h1 id="intro">I build <span class="headline-accent">applied ML</span> projects that ship.</h1>
+      <p class="sub">Final‑year Computer Science student in Brisbane focused on <strong>U‑Net segmentation</strong>, <strong>MDP/Search</strong>, and turning models into usable products (Python, PyTorch, FastAPI, Docker, SQL).</p>
+      <div class="cta">
+        <a class="btn primary" href="./resume.pdf" target="_blank" rel="noreferrer">View résumé (PDF)</a>
+        <a class="btn" href="https://github.com/USERNAME" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/USERNAME" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a class="btn" href="#contact">Email me</a>
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="proj-h2">
+      <h2 id="proj-h2">Featured projects</h2>
+      <p class="muted">Three concise case studies. Replace placeholders with your images/links and add metrics.</p>
+      <div class="cards">
+        <!-- Project 1: U-Net -->
+        <article class="card" aria-labelledby="p1-title">
+          <div class="thumb" aria-hidden="true"></div>
+          <div class="body">
+            <h3 id="p1-title">U‑Net MRI Segmentation</h3>
+            <p>Trained and evaluated a U‑Net for brain MRI segmentation. Implemented augmentation, IoU/Dice metrics, error analysis, and exported an inference script.</p>
+            <ul class="tags">
+              <li class="tag">PyTorch</li>
+              <li class="tag">Segmentation</li>
+              <li class="tag">Docker</li>
+            </ul>
+          </div>
+          <div class="actions">
+            <a class="chip" href="https://github.com/USERNAME/unet-segmentation" target="_blank" rel="noreferrer">Code ↗</a>
+            <a class="chip" href="#" aria-disabled="true" onclick="return false;">Demo (soon)</a>
+          </div>
+        </article>
+
+        <!-- Project 2: MDP/Search -->
+        <article class="card" aria-labelledby="p2-title">
+          <div class="thumb" aria-hidden="true"></div>
+          <div class="body">
+            <h3 id="p2-title">MDP & Search Toolkit</h3>
+            <p>Value Iteration, Policy Iteration, A*/BFS with visual policy heatmaps. Benchmarked convergence and complexity across custom gridworlds.</p>
+            <ul class="tags">
+              <li class="tag">Python</li>
+              <li class="tag">MDP</li>
+              <li class="tag">A*</li>
+            </ul>
+          </div>
+          <div class="actions">
+            <a class="chip" href="https://github.com/USERNAME/mdp-search" target="_blank" rel="noreferrer">Code ↗</a>
+            <a class="chip" href="#" aria-disabled="true" onclick="return false;">Report (soon)</a>
+          </div>
+        </article>
+
+        <!-- Project 3: Placeholder for next project -->
+        <article class="card" aria-labelledby="p3-title">
+          <div class="thumb" aria-hidden="true"></div>
+          <div class="body">
+            <h3 id="p3-title">Next Project: API + Monitoring</h3>
+            <p>Coming up: turn the U‑Net into a FastAPI service with tests, CI/CD, and drift monitoring. This slot shows recruiters you’re actively building.</p>
+            <ul class="tags">
+              <li class="tag">FastAPI</li>
+              <li class="tag">CI/CD</li>
+              <li class="tag">MLflow</li>
+            </ul>
+          </div>
+          <div class="actions">
+            <a class="chip" href="#" aria-disabled="true" onclick="return false;">Code (soon)</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-h2">
+      <h2 id="skills-h2">Skills</h2>
+      <div class="grid">
+        <div>
+          <h3>Languages & Tools</h3>
+          <div class="list">
+            <span class="badge">Python</span>
+            <span class="badge">PyTorch</span>
+            <span class="badge">NumPy/Pandas</span>
+            <span class="badge">FastAPI</span>
+            <span class="badge">SQL</span>
+            <span class="badge">Docker</span>
+            <span class="badge">Git/GitHub</span>
+          </div>
+        </div>
+        <div>
+          <h3>Interests</h3>
+          <div class="list">
+            <span class="badge">Computer Vision</span>
+            <span class="badge">Reinforcement Learning</span>
+            <span class="badge">MLOps</span>
+            <span class="badge">Systems & Infra</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" aria-labelledby="about-h2">
+      <h2 id="about-h2">About</h2>
+      <p>Hi, I’m Kurt — a final‑year Computer Science student at the University of Queensland focusing on applied machine learning. I enjoy shipping small, well‑tested systems and learning by building. I’m currently looking for graduate roles in ML Engineering, Data Science, or MLOps in Brisbane/SE QLD (open to remote within AU).</p>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-h2">
+      <h2 id="contact-h2">Contact</h2>
+      <p>Best way to reach me is email: <a href="mailto:kurt@example.com">kurt@example.com</a>. I also post code on <a href="https://github.com/USERNAME" target="_blank" rel="noreferrer">GitHub</a> and career updates on <a href="https://www.linkedin.com/in/USERNAME" target="_blank" rel="noreferrer">LinkedIn</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year">2025</span> Kurt Armamento • Built with plain HTML + CSS • <a href="#intro">Back to top</a></p>
+  </footer>
+  <script>
+    // Cosmetic: keep the year current without frameworks. Feel free to delete for CSS‑only purism.
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
